@@ -135,6 +135,13 @@ Mais detalhes, fluxos e decisões de segurança em [docs/arquitetura.md](docs/ar
 
 Nível da fala preservado e cerca de 36 ms de latência adicional.
 
+**Uso real do TURN** (Cloudflare, últimos 30 dias): cerca de 122 MB de saída e 112 MB
+de entrada. O relay só entra quando a conexão direta falha, então o consumo fica baixo
+mesmo com chamadas diárias. O pico do dia 29 foi uma rodada de testes automatizados de
+mídia e correções de bugs.
+
+![Tráfego do TURN da Cloudflare nos últimos 30 dias](docs/img/turn-cloudflare-30-dias.png)
+
 **Qualidade**: cada etapa seguiu o mesmo ciclo: implementar, testar isolado, integrar,
 rodar a regressão inteira e só avançar com tudo passando. Os testes de mídia conferem
 pacotes RTP, energia do áudio decodificado e quadros de vídeo, não só ícones na tela.
