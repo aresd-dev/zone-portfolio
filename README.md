@@ -16,9 +16,9 @@ com TURN da Cloudflare e cliente para Windows.
 > [amostras reais do código](amostras/). Posso dar acesso de leitura ao repositório
 > completo para avaliação técnica, é só pedir.
 
-![Escritório virtual: duas pessoas conversam pela proximidade e uma terceira está na sala de reunião](docs/img/escritorio-conversa.png)
+![Chamada do Zone no tema escuro: tela compartilhada no palco, três pessoas na sala e o menu de opções aberto pelo clique direito na foto de Ares](docs/img/zone-chamada.png)
 
-<sub>Escritório virtual com três pessoas. Ana e Bruno estão perto e se ouvem; os balões mostram o chat local. Carla está na sala de reunião e não recebe nada de fora.</sub>
+<sub>Chamada com a tela compartilhada no palco. O clique direito na foto de uma pessoa abre as opções dela: volume e silenciar só para mim e, para administradores, para todos. Embaixo, a supressão de ruído e a "Voz conectada", que continuam visíveis em qualquer tela.</sub>
 
 ---
 
@@ -27,7 +27,7 @@ com TURN da Cloudflare e cliente para Windows.
 O Zone começou como um lugar para eu e dois amigos conversarmos por texto e voz sem
 depender de serviços grandes. Virou meu projeto de estudo de sistemas em tempo real:
 
-- **Zone Call**: servidores, canais de texto com histórico e mensagens ao vivo,
+- **Zone Call**: Zonas (servidores), canais de texto com histórico e mensagens ao vivo,
   chamada de voz para até 3 pessoas, compartilhamento de tela, moderação e app Windows.
 - **Escritório virtual**: um mapa 2D em grade onde a distância entre as pessoas
   define quem se ouve, com salas de reunião, áreas de foco, mesas, pomodoro e chat local.
@@ -38,31 +38,70 @@ conta, mas também roda sozinho. Nenhum importa código do outro.
 | | |
 | --- | --- |
 | Período | setembro e outubro de 2026, em etapas pequenas |
-| Tamanho | cerca de 23 mil linhas de código e 30 mil linhas de testes |
-| Testes | mais de 2.000 automatizados (Go, Python, Vitest e fluxos reais no navegador) |
+| Tamanho | cerca de 32 mil linhas de código e 40 mil linhas de testes |
+| Testes | mais de 2.800 automatizados (Go, Python, Vitest e fluxos reais no navegador) |
 | Hospedagem | Render (um único serviço), Supabase PostgreSQL, Cloudflare TURN |
+
+## Interface
+
+Em outubro de 2026 a interface do Zone Call foi refeita a partir de um design no Figma.
+Os tokens do arquivo (cores, tipografia, espaçamentos e raios) foram exportados e viraram
+variáveis CSS, então a tela e o design usam os mesmos valores.
+
+- **Temas**: claro ou escuro (segue o sistema até a pessoa escolher), estilo Zone ou
+  和風 Wafū e 8 cores de destaque. O tema é aplicado antes do React carregar, sem piscar
+  o tema errado.
+- **Início ao vivo**: quem está em voz e quem está transmitindo em cada Zona, com
+  atalho para assistir ou entrar.
+- **Navegação sem espera**: a última lista vista aparece na hora e é confirmada em
+  segundo plano; os 5 últimos canais de texto ficam guardados com o rascunho.
+- **Acessível pelo teclado**: menus, diálogos e o recorte da foto funcionam sem mouse e
+  têm rótulos para leitores de tela.
+
+![Início do Zone no tema claro: uma transmissão ao vivo em destaque e a lista de Zonas com quem está em voz](docs/img/zone-inicio-ao-vivo.png)
+
+<sub>Início: a transmissão de Ryan aparece em destaque e cada Zona mostra quantas pessoas estão online e em voz.</sub>
+
+![Canal de texto no estilo Wafū claro: mensagens com reações, uma mensagem editada e quem está na sala de voz listado na lateral](docs/img/zone-chat-wafu.png)
+
+<sub>Canal de texto no estilo Wafū: reações, mensagem editada e "digitando…". Na lateral, quem está na sala de voz aparece sem precisar entrar nela.</sub>
 
 ## Funcionalidades
 
 **Zone Call**
 
 - Cadastro por convite e login que dura até 30 dias, com renovação automática e segura.
-- Canais de texto com histórico paginado, mensagens ao vivo, presença e "digitando…".
+- Canais de texto com histórico paginado, mensagens ao vivo, presença e "digitando…";
+  editar, reagir (lista fechada de emojis) e buscar mensagens.
 - Chamada de voz WebRTC entre os participantes, funcionando entre redes diferentes.
-- **Supressão de ruído com IA** no navegador: corta teclado, louça e respiração.
-- Compartilhamento de tela com áudio opcional e troca de fonte sem sair da chamada.
-- Controles pessoais (silenciar e volume só para mim) e de administrador
-  (silenciar para todos, volume para todos, **remover da chamada**).
+- **A chamada continua enquanto você navega** (Início, outras Zonas, Configurações e
+  escritório) e só termina no botão de desconectar.
+- Palco da chamada com cronômetro, anel em quem está falando, reações e ensurdecer.
+- **Supressão de ruído com IA** no navegador, escolhida ao lado de "Voz conectada" em
+  quatro níveis, dois com IA: DeepFilterNet3, GTCRN com portão de voz, a do navegador ou desligada.
+- Compartilhamento de tela em até 1080p com áudio opcional, troca de fonte sem sair da
+  chamada, modo "texto e detalhes" ou "movimento" e janela flutuante.
+- Opções de cada pessoa no clique direito da foto, como no Discord: volume e silenciar
+  só para mim; para administradores, silenciar e volume para todos e **remover da chamada**.
+- Foto de perfil com recorte (arrastar, zoom e teclado), reduzida no navegador antes do envio.
+- Configurações de perfil, voz e áudio, tela, notificações e sons, atalhos de teclado e
+  conta (trocar a senha e sair dos outros aparelhos).
 - **Jam do Spotify** compartilhado na chamada.
-- App Windows (PySide6 + Qt WebEngine) com bandeja e navegação restrita ao Zone.
+- App Windows (PySide6 + Qt WebEngine) com bandeja, notificações nativas, permissão do
+  microfone lembrada e navegação restrita ao Zone.
 
 **Escritório virtual**
 
+- Um escritório para a instalação inteira, aberto pelo botão da porta na barra lateral.
 - Movimento em 4 direções validado no servidor (colisão, velocidade e ordem).
 - Áudio espacial: o volume cai com a distância e paredes bloqueiam o som.
 - Salas de reunião isoladas, áreas de foco só com texto e conversa "trancada" com consentimento.
 - Mesas, pomodoro individual, chat local com balões e mensagens privadas.
 - Convite de reunião que reserva uma sala e leva as duas pessoas juntas.
+
+![Escritório virtual: duas pessoas conversam pela proximidade e uma terceira está na sala de reunião](docs/img/escritorio-conversa.png)
+
+<sub>Escritório virtual com três pessoas. Ana e Bruno estão perto e se ouvem; os balões mostram o chat local. Carla está na sala de reunião e não recebe nada de fora.</sub>
 
 ## Arquitetura
 
@@ -85,16 +124,16 @@ flowchart LR
     GW -- "/office/v1" --> OFF
     API --> DB
     API -- "notifica após salvar" --> GW
-    OFF -- "valida conta e servidor" --> API
+    OFF -- "valida a conta" --> API
     RTC -. "mídia P2P" .-> TURN
 ```
 
 | Parte | Responsabilidade |
 | --- | --- |
-| Python (FastAPI) | Autenticação, autorização, regras de negócio, persistência, credenciais TURN temporárias |
+| Python (FastAPI) | Autenticação, autorização, regras de negócio, persistência, credenciais TURN temporárias, fotos de perfil |
 | Go (gateway do Zone) | Porta pública: site, proxy da API, WebSocket autenticado, presença, distribuição de mensagens já salvas, sinalização da chamada |
 | Go (escritório) | Estado autoritativo do mapa: posição, ocupação, quem ouve quem, reuniões |
-| TypeScript | Interface, Canvas, captura e reprodução de mídia, supressão de ruído |
+| TypeScript | Interface com os tokens do Figma, Canvas, captura e reprodução de mídia, supressão de ruído |
 
 Princípios que guiaram as decisões:
 
@@ -117,7 +156,10 @@ Mais detalhes, fluxos e decisões de segurança em [docs/arquitetura.md](docs/ar
 | Hospedagem gratuita que dorme após 15 min e limita tráfego | Tudo em um único serviço supervisionado; a mídia nunca atravessa o servidor |
 | Login perdido a cada recarga | Sessão com cookie `HttpOnly` rotativo, só o hash no banco, e revogação da família inteira se um token antigo for reutilizado ([amostra](amostras/python/sessions_repo.py)) |
 | Sinais WebRTC atrasados religavam áudio que deveria estar fechado | Gerações e IDs por sessão, contexto e transmissão; o que é antigo é descartado |
-| Respiração, teclado e louça na chamada | Comparei RNNoise e GTCRN com medições; adotei GTCRN + um portão de voz próprio ([detalhes](docs/supressao-de-ruido.md)) |
+| Respiração, teclado e louça na chamada | Comparei RNNoise, GTCRN e DeepFilterNet3 com medições; ficaram o DeepFilterNet3 compilado para WebAssembly e o GTCRN com um portão de voz próprio ([detalhes](docs/supressao-de-ruido.md)) |
+| Navegar pelo app derrubava a chamada | A sala de voz fica num hospedeiro acima das rotas e só muda de posição na tela; áudio e vídeo nunca mudam de lugar no DOM, porque mover um `<audio>` pausa o som |
+| A tela compartilhada caía para 2–4 quadros/s com dois espectadores e o PC ocupado | Medi os codecs e passei a escolher por medição: H.264 da placa de vídeo quando existe, AV1 para texto e VP9 para movimento, perto de 30 quadros/s |
+| Fotos de celular eram recusadas | O limite que valia era o do gateway (1 MB), não o do navegador; a foto é recortada e reduzida a 512 px em WebP antes de sair do navegador |
 | Janelas em segundo plano derrubavam a conexão (temporizadores reduzidos pelo navegador) | Ping/pong nativo do WebSocket e página mantida ativa no app Qt |
 | Build do app Windows quebrava | O PyInstaller pegava uma DLL ICU incompatível do `PATH`; o build isola o `PATH` e testa o `.exe` gerado |
 | Spotify não tem API pública de Jam | A chamada compartilha o convite, com validação estrita do link ([amostra](amostras/go/zone-call/jam.go)) |
@@ -125,15 +167,15 @@ Mais detalhes, fluxos e decisões de segurança em [docs/arquitetura.md](docs/ar
 
 ## Resultados
 
-**Supressão de ruído** (medida em tempo real no Edge, nível nas pausas da fala):
+**Supressão de ruído** (medida em tempo real no Edge em 06/10, nível nas pausas da fala):
 
-| Ruído | Microfone | Com supressão |
-| --- | --- | --- |
-| Teclado mecânico | −41 dB | −58 dB |
-| Respiração | −33 dB | −91 dB |
-| Louça | −35 dB | −60 dB |
+| Ruído | Microfone | GTCRN + portão de voz | DeepFilterNet3 |
+| --- | --- | --- | --- |
+| Teclado mecânico | −41 dB | −65 dB | −70 dB |
+| Respiração | −33 dB | −90 dB | −81 dB |
+| Louça | −35 dB | −62 dB | silêncio (−120 dB) |
 
-Nível da fala preservado e cerca de 36 ms de latência adicional.
+Nível da fala preservado nos dois. Medições e métodos em [docs/supressao-de-ruido.md](docs/supressao-de-ruido.md).
 
 **Uso real do TURN** (Cloudflare, últimos 30 dias): cerca de 122 MB de saída e 112 MB
 de entrada. O relay só entra quando a conexão direta falha, então o consumo fica baixo
@@ -145,16 +187,18 @@ mídia e correções de bugs.
 **Qualidade**: cada etapa seguiu o mesmo ciclo: implementar, testar isolado, integrar,
 rodar a regressão inteira e só avançar com tudo passando. Os testes de mídia conferem
 pacotes RTP, energia do áudio decodificado e quadros de vídeo, não só ícones na tela.
+A interface nova também é conferida num Edge real: a chamada continua ao navegar, o menu
+abre dentro da tela e a foto recortada sai com o pedaço escolhido.
 
 | Módulo | Testes automatizados |
 | --- | --- |
-| Zone Call | 439 web (Vitest), 265 Go, 327 Python e integração com banco real |
-| Escritório | 634 Go, 393 web, 43 Python com fluxos reais no Edge (áudio, tela, reuniões) |
-| App Windows | testes isolados, WebRTC em segundo plano, perfil entre reinícios |
+| Zone Call | 727 web (Vitest), 315 Go, 455 Python unitários e 255 de integração com banco real |
+| Escritório | 634 Go, 396 web, 43 Python com fluxos reais no Edge (áudio, tela, reuniões) |
+| App Windows | 36: isolados, WebRTC em segundo plano, perfil entre reinícios e troca de versão |
 
 ![Sala de reunião: quem está dentro não recebe a fala de fora](docs/img/escritorio-sala-de-reuniao.png)
 
-<sub>A mesma cena vista por Carla, na sala de reunião: os balões de quem está fora não chegam até ela.</sub>
+<sub>A mesma cena do escritório vista por Carla, na sala de reunião: os balões de quem está fora não chegam até ela.</sub>
 
 ## Amostras do código
 
@@ -174,15 +218,15 @@ Arquivos reais, copiados sem alteração além do cabeçalho. Veja o [guia das a
 
 ## Stack
 
-- **Backend**: Python 3.11+ (FastAPI, psycopg), PostgreSQL (Supabase); Go 1.22+ (gorilla/websocket)
-- **Frontend**: React 18, TypeScript, Vite, Canvas 2D, Web Audio (AudioWorklet), WebRTC
+- **Backend**: Python 3.11+ (FastAPI, psycopg, Pillow), PostgreSQL (Supabase, com Storage para as fotos); Go 1.22+ (gorilla/websocket)
+- **Frontend**: React 18, TypeScript, Vite, tokens do Figma em variáveis CSS, Canvas 2D, Web Audio (AudioWorklet + WebAssembly), WebRTC
 - **Desktop**: PySide6 / Qt WebEngine, PyInstaller
 - **Infra**: Docker multi-stage, Render, Cloudflare TURN
 - **Testes**: Vitest, pytest, `go test`, fluxos reais no Edge via Chrome DevTools Protocol
 
 ## Próximos passos
 
-- Visual do Zone Call: hoje a interface prioriza função e acessibilidade; o escritório já tem identidade visual própria.
+- "Esqueci a senha" por e-mail: pronto no código, falta ligar o envio de e-mail na hospedagem.
 - Servidor de mídia (SFU) se o grupo passar de 3 pessoas por chamada.
 - Rodadas com microfones e redes reais de mais pessoas.
 
@@ -200,11 +244,14 @@ avaliação de portfólio.
 
 Zone is a personal project in real use by a small group: a Discord-like app (text
 channels, voice calls with screen sharing, AI noise suppression, moderation) plus a
-Gather-like 2D virtual office where proximity decides who you hear. Python owns
-accounts, rules and persistence; Go owns live connections, presence, WebRTC signaling
-and the authoritative office world; TypeScript drives the UI, Canvas and media. It
-runs in the browser and as a Windows app, hosted on Render with Cloudflare TURN.
-About 23k lines of code and 30k lines of tests. This is a showcase repository: the
-full source is private and available for technical review on request.
+Gather-like 2D virtual office where proximity decides who you hear. The UI was rebuilt
+in October 2026 from a Figma design, with the design tokens exported to CSS variables:
+light and dark themes, two styles and eight accent colors, a live home page, and a call
+that keeps running while you navigate the app. Python owns accounts, rules and
+persistence; Go owns live connections, presence, WebRTC signaling and the authoritative
+office world; TypeScript drives the UI, Canvas and media. It runs in the browser and as
+a Windows app, hosted on Render with Cloudflare TURN. About 32k lines of code and 40k
+lines of tests. This is a showcase repository: the full source is private and available
+for technical review on request.
 
 </details>

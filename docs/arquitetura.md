@@ -91,8 +91,9 @@ A pessoa pode entrar de novo; a remoção encerra a sessão atual, não bane.
 
 1. O Zone carrega em tempo de execução o módulo servido pelo escritório
    (`/office-embed`). O bundle do Zone não compila código do escritório.
-2. Na entrada, o escritório recebe o JWT do Zone uma única vez, valida a conta e o
-   vínculo com o servidor-escritório na API Python e troca por uma credencial própria.
+2. Há um escritório para a instalação inteira. Na entrada, ele recebe o JWT do Zone uma
+   única vez, pergunta à API Python se a conta pode entrar (a mesma regra de todas as
+   rotas) e troca por uma credencial própria. Sem resposta da API, a entrada é recusada.
 3. A partir daí, o cliente só envia intenções: "andar para cima", "falar", "entrar
    na sala". O servidor valida ordem, velocidade, colisão e capacidade.
 4. Para cada par de pessoas, o servidor decide se há texto, áudio e com qual volume,
@@ -133,5 +134,5 @@ Código: [world.go](../amostras/go/escritorio/world.go) e
 | Um serviço supervisionado | Vários serviços | Plano gratuito e menos pontos de falha |
 | Python para regras, Go para tempo real | Uma linguagem só | Cada uma no que faz melhor; o contrato entre elas fica explícito |
 | Estado do escritório em memória no Go | Banco para posições | Posição muda várias vezes por segundo; só mesas e mensagens persistem |
-| GTCRN no navegador | RNNoise ou supressão no servidor | Medido: reduz mais e distorce menos; a mídia não passa pelo servidor |
+| IA no navegador (DeepFilterNet3 e GTCRN) | RNNoise ou supressão no servidor | Medido: reduz mais e distorce menos; a mídia não passa pelo servidor |
 | Testes em navegador real via CDP | Só testes unitários | Mídia e WebRTC só se provam com pacotes e áudio de verdade |
