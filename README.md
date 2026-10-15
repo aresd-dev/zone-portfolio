@@ -16,9 +16,9 @@ com TURN da Cloudflare e cliente para Windows.
 > [amostras reais do código](amostras/). Posso dar acesso de leitura ao repositório
 > completo para avaliação técnica, é só pedir.
 
-![Chamada do Zone no tema escuro: tela compartilhada no palco, três pessoas na sala e o menu de opções aberto pelo clique direito na foto de Ares](docs/img/zone-chamada.png)
+![Chamada do Zone no tema escuro: tela compartilhada no palco, três pessoas na sala e o menu de opções aberto pelo clique direito na foto de Pedro](docs/img/zone-chamada.png)
 
-<sub>Chamada com a tela compartilhada no palco. O clique direito na foto de uma pessoa abre as opções dela: volume e silenciar só para mim e, para administradores, para todos. Embaixo, a supressão de ruído e a "Voz conectada", que continuam visíveis em qualquer tela.</sub>
+<sub>Ares compartilha a tela numa chamada com Pedro e Edu. O clique direito na foto de uma pessoa abre as opções dela: volume e silenciar só para mim e, para administradores, para todos. Embaixo, a supressão de ruído e a "Voz conectada", que continuam visíveis em qualquer tela.</sub>
 
 ---
 
@@ -60,7 +60,7 @@ variáveis CSS, então a tela e o design usam os mesmos valores.
 
 ![Início do Zone no tema claro: uma transmissão ao vivo em destaque e a lista de Zonas com quem está em voz](docs/img/zone-inicio-ao-vivo.png)
 
-<sub>Início: a transmissão de Ryan aparece em destaque e cada Zona mostra quantas pessoas estão online e em voz.</sub>
+<sub>Início: a transmissão de Pedro aparece em destaque e cada Zona mostra quantas pessoas estão online e em voz.</sub>
 
 ![Canal de texto no estilo Wafū claro: mensagens com reações, uma mensagem editada e quem está na sala de voz listado na lateral](docs/img/zone-chat-wafu.png)
 
@@ -101,7 +101,7 @@ variáveis CSS, então a tela e o design usam os mesmos valores.
 
 ![Escritório virtual: duas pessoas conversam pela proximidade e uma terceira está na sala de reunião](docs/img/escritorio-conversa.png)
 
-<sub>Escritório virtual com três pessoas. Ana e Bruno estão perto e se ouvem; os balões mostram o chat local. Carla está na sala de reunião e não recebe nada de fora.</sub>
+<sub>Escritório virtual com três pessoas, visto por Ares. Ares e Pedro estão perto e se ouvem; os balões mostram o chat local. Edu está na sala de reunião e não recebe a fala de quem está fora.</sub>
 
 ## Arquitetura
 
@@ -195,10 +195,6 @@ abre dentro da tela e a foto recortada sai com o pedaço escolhido.
 | Zone Call | 727 web (Vitest), 315 Go, 455 Python unitários e 255 de integração com banco real |
 | Escritório | 634 Go, 396 web, 43 Python com fluxos reais no Edge (áudio, tela, reuniões) |
 | App Windows | 36: isolados, WebRTC em segundo plano, perfil entre reinícios e troca de versão |
-
-![Sala de reunião: quem está dentro não recebe a fala de fora](docs/img/escritorio-sala-de-reuniao.png)
-
-<sub>A mesma cena do escritório vista por Carla, na sala de reunião: os balões de quem está fora não chegam até ela.</sub>
 
 ## Amostras do código
 
